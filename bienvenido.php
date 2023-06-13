@@ -1,3 +1,7 @@
+<?php
+session_start();
+include 'conexion.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +31,22 @@
 </head>
 
 <body>
+<?php
+
+if (isset($_SESSION['username']) && isset($_SESSION['id_rol'])) {
+  $rol_id = $_SESSION['id_rol'];
+  $username = $_SESSION['username'];
+
+
+  $query = "SELECT opcion FROM menu WHERE id_rol = $rol_id";
+  $result = mysqli_query($conect, $query);
+
+} else {
+  
+  header("Location: login.php");
+  exit();
+}
+?>
     <!-- Navbar Start -->
     <div class="container-fluid p-0 nav-bar">
         <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
@@ -49,7 +69,7 @@
                             <a href="#" class="dropdown-item">Testimonial</a>
                         </div>
                     </div>
-                    <a href="#" class="nav-item nav-link">Contact</a>
+                    <a href="logout.php" class="nav-item nav-link">Salir</a>
                 </div>
             </div>
         </nav>
@@ -61,7 +81,7 @@
         <div id="blog-carousel" class="carousel slide overlay-bottom" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="w-100" src="img/carousel-1.jpg" alt="Image">
+                    <img class="w-100" src="./img/c1.jpg" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <h2 class="text-primary font-weight-medium m-0">We Have Been Serving</h2>
                         <h1 class="display-1 text-white m-0">COFFEE</h1>
@@ -69,7 +89,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="w-100" src="img/carousel-2.jpg" alt="Image">
+                    <img class="w-100" src="./img/c2.jpg" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <h2 class="text-primary font-weight-medium m-0">We Have Been Serving</h2>
                         <h1 class="display-1 text-white m-0">COFFEE</h1>
@@ -86,8 +106,62 @@
         </div>
     </div>
     <!-- Carousel End -->
+     <!-- NavBar de Rol-->
 
+    <div class="container-fluid p-0 nav-bar">
+        <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3" style="background-color:white">
+            <a href="#" class="navbar-brand px-lg-4 m-0">
+                <h1 class="m-0 display-4 text-uppercase text-white">
 
+                <?php
+          if (isset($_SESSION['username']) && isset($_SESSION['id_rol'])) {
+            $rol_id = $_SESSION['id_rol'];
+            $username = $_SESSION['username'];
+
+            switch ($rol_id) {
+              case 1:
+                echo "<h4>Menú de Administrador</h4>";
+                break;
+              case 2:
+                echo "<h4>Menú de Cajero</h4>";
+                break;
+              case 3:
+                echo "<h4>Menú de Supervisor</h4>";
+                break;
+              default:
+                echo "Rol no válido";
+                break;
+            }
+          }
+          
+          ?> 
+                </h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse1" style="background-color:gray">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse1">
+                <div class="navbar-nav ml-auto p-4">
+                <a href="#" style="color: black; font-size:20px; margin:10px; text-decoration:none; text-align: center;"> 
+              <?php
+                $opcion = array();
+                while ($row = mysqli_fetch_assoc($result)) {
+                  $opcion[] = $row['opcion'];
+                }
+              
+                foreach ($opcion as $opciones) {
+                  echo "     $opciones   ";
+               
+              }
+            
+              ?>
+              </a>
+                   
+            </div>
+        </nav>
+    </div>
+    </div>
+  <!-- End NavBar de Rol-->
     <!-- Service Start -->
     <div class="container-fluid pt-5">
         <div class="container">

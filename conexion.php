@@ -4,7 +4,7 @@ $conect=new mysqli(
     "localhost",
     "root",
     "",
-    "rep"
+    "bdjsyse"
 );
 
     //comprobamos la conexion
